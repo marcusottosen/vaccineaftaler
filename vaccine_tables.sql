@@ -12,7 +12,7 @@ CREATE TABLE Employee (
     emp_no      SMALLINT auto_increment,
     emp_CPR     BIGINT(11),
     salary      DECIMAL(5,2),
-    title		VARCHAR(15),
+    title		ENUM('Manager', 'Nurse', 'Doctor'),
     email		TEXT(30),
     phone		INT(8),
     address		TEXT(100),
@@ -38,13 +38,13 @@ FOREIGN KEY (emp_no) REFERENCES Employee (emp_no)
 );
 
 create table Vaccinetype(
-	vaccine_type 	VARCHAR(10),
+	vaccine_type 	ENUM('covaxx','aspera','blast3000','divoc'),
 PRIMARY KEY (vaccine_type)
 );
 
 CREATE TABLE Stock(
 	dept_no 		SMALLINT,
-	vaccine_type 	VARCHAR (10),
+	vaccine_type 	ENUM('covaxx','aspera','blast3000','divoc'),
 	Amount 			SMALLINT,
 PRIMARY KEY (dept_no, vaccine_type),
 FOREIGN KEY (dept_no) 
@@ -55,11 +55,11 @@ FOREIGN KEY (vaccine_type)
 
 CREATE TABLE Appointments (
 	daily_appointment_ID	DATE,
-	CPR				        INT(11),
+	CPR				        BIGINT(11),
 	customer_name			VARCHAR(15),
 	appointment_date		DATE,
 	appointment_time	    DATE,
-	vaccine_type	        VARCHAR(10),
+	vaccine_type	        ENUM('covaxx','aspera','blast3000','divoc'),
 	city			        VARCHAR(20),
 PRIMARY KEY(CPR, daily_appointment_ID),
 FOREIGN KEY (vaccine_type) 
@@ -67,7 +67,7 @@ FOREIGN KEY (vaccine_type)
 );
 
 CREATE TABLE Customer (
-	CPR				INT(11),
+	CPR				BIGINT(11),
 	emp_no			SMALLINT auto_increment,
 PRIMARY KEY (CPR),
 FOREIGN KEY (emp_no) 
@@ -77,7 +77,7 @@ FOREIGN KEY (CPR)
 );
 
 CREATE TABLE Person (
-	CPR			INT(11),
+	CPR			BIGINT(11),
     first_name	VARCHAR(15),
     surname		VARCHAR(20),
 PRIMARY KEY (CPR, first_name, surname),
@@ -87,7 +87,7 @@ FOREIGN KEY (CPR)
 
 create table Certificate(
 certificate_no          SMALLINT auto_increment,
-Vaccine_type            VARCHAR(10),
+Vaccine_type            ENUM('covaxx','aspera','blast3000','divoc'),
 certified_date          DATE,
 emp_no                  SMALLINT,
 PRIMARY KEY (certificate_no),
@@ -95,8 +95,13 @@ FOREIGN KEY (emp_no) REFERENCES Employee (emp_no),
 FOREIGN KEY (vaccine_type) REFERENCES Vaccinetype(vaccine_type)
 );
 
-
 INSERT Employee VALUES
-(NULL, 2447965342, 160, 'manager', 'marcus@gmail.com' , 34256236, 'tøjmestervej 16 3tv'),
-(NULL, 2443933442, 160, 'manager', 'marcus@gmail.com' , 34256236, 'tøjmestervej 16 3tv');
+(NULL, 2447965342, 250, 'Manager', 'marcus323@gmail.com' , 34256236, 'tøjmestervej 53 3tv'),
+(NULL, 4363456346, 160, 'Nurse', 'thomas3523@gmail.com' , 54457565, 'Overhærupvej 128, 4951 Nørreballe'),
+(NULL, 5647376536, 210, 'Doctor', 'tim352@gmail.com' , 27542754, 'Frørupvej 99, 1149 KøbenhavnK'),
+(NULL, 3637245453, 210, 'Doctor', 'bob123@gmail.com' , 56742234, 'Åledalen 35, 1902 Frederiksberg C'),
+(NULL, 5634876385, 200, 'Doctor', 'tim392@gmail.com' , 78987597, 'Christianslundsvej 50, 4532 Gislinge'),
+(NULL, 4457374565, 190, 'Doctor', 'thomas.thimsen@gmail.com' , 87957857, 'Blæsenborgvej 5, 1064 Svenderup '),
+(NULL, 5747356365, 200, 'Doctor', 'ole.wedel@gmail.com' , 69554766, 'Sibiriensvej 28, 4243 Rude'),
+(NULL, 6574856856, 210, 'Doctor', 'nick420@gmail.com' , 34527676, 'Ladbyvej 89, 6855 Outrup');
 SELECT * FROM Employee;
