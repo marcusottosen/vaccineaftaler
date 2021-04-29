@@ -64,8 +64,6 @@ public class VaccinationsAftale {
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
-		System.out.println("Testinger");
-
 		return getCprnr() + D + getNavn() + D + dateFormatter.format(getAftaltTidspunkt()) + D + getLokation() + D + getVaccineType();
 	}
 }
