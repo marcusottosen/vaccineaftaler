@@ -1,6 +1,6 @@
 
 INSERT Employee VALUES
-(NULL, 2447965342, 'marcus thomsen', 'Manager', 100, 210, 'marcus323@gmail.com' , 34256236, 'København', 'tøjmestervej', 16, NULL, '1999-04-26'),
+(NULL, 2447965342, 'Marcus Thomsen', 'Manager', 100, 210, 'marcus323@gmail.com' , 34256236, 'København', 'tøjmestervej', 16, NULL, '1999-04-26'),
 (NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26');
 #(NULL, 5647376536, 210, 'Doctor', 'tim352@gmail.com' , 27542754, 'Frørupvej 99, 1149 KøbenhavnK'),
 #(NULL, 3637245453, 210, 'Doctor', 'bob123@gmail.com' , 56742234, 'Åledalen 35, 1902 Frederiksberg C'),
@@ -18,13 +18,11 @@ INSERT Vaccinetype VALUES
     ('aspera');
 
 
-INSERT INTO Certificate VALUES (NULL, 'covaxx', now(), 1);
+INSERT INTO Certificate (certificate_no, vaccine_type, emp_no, certified_date) 
+	VALUES (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now());
 SELECT * FROM Certificate;
 
 
-INSERT Customer VALUES
-('3101990981', 'Victor Emil Skafte Kongsbak', 'Holte', 'Vængestien', 2, NULL);
-SELECT * FROM Customer;
 
 
 INSERT Department VALUES
@@ -47,6 +45,44 @@ INSERT Occurs VALUES
 SELECT * FROM Occurs;
 
 
-INSERT Appointment VALUES
-(NULL, '3101990981', 'Victor Emil Skafte Kongsbak', '2021-04-05', '11:30:00', 'covaxx', '1', 'København');
+
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXX TRIGGER XXXXXXXXXXXXXXXXXXXXXXXXXXX
+#Registrer appointment og opret customer hvis ikke eksisterer. 
+DELIMITER //
+CREATE TRIGGER Register_Customer
+BEFORE INSERT ON Appointment FOR EACH ROW
+BEGIN
+	INSERT INTO Customer
+    SELECT NEW.CPR, NEW.appointment_name
+	WHERE NOT EXISTS(
+		SELECT CPR
+        FROM 
+			Customer
+		WHERE
+			Customer.CPR = NEW.CPR
+	);
+END//
+DELIMITER ;
+
+##Insert appointments XXXXXXXXX DETTE BØR FJERNES, NÅR VI KAN LÆSE CSV FILEN MED APPOINTMENTS
+INSERT Appointment VALUES 
+	(NULL, '3101990981', 'Victor Kongsbak', '2021-04-05', '11:30', 'covaxx', 'København'),
+	(NULL, '1212562345', 'jakob Svensson', '2021-04-05', '09:30', 'covaxx', 'København'),
+	(NULL, '0405993487', 'Torben Jakobsen', '2021-04-05', '11:00', 'covaxx', 'København'),
+	(NULL, '3101990981', 'Victor Kongsbak', '2021-06-05', '12:00', 'covaxx', 'København'),
+	(NULL, '2403778789', 'Anton Bloch', '2021-04-05', '11:00', 'covaxx', 'København');
 SELECT * FROM Appointment;
+SELECT * FROM Customer;
+
+
+
+
+
+
+
+
+
+
+
+
