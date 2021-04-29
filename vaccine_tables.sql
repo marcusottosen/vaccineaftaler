@@ -1,6 +1,6 @@
-#DROP DATABASE vaccineberedskabet;
-#CREATE DATABASE vaccineberedskabet;
-#USE vaccineberedskabet;
+DROP DATABASE vaccineberedskabet;
+CREATE DATABASE vaccineberedskabet;
+USE vaccineberedskabet;
 
 DROP TABLE IF EXISTS Certificate;
 DROP TABLE IF EXISTS Stock;
@@ -76,18 +76,14 @@ FOREIGN KEY (vaccine_type)
 CREATE TABLE Customer (
 	CPR				BIGINT(11),
 	customer_name	TEXT(30),
-	city		    VARCHAR(20),
-    street		    VARCHAR(20),
-    house_no	    SMALLINT,
-    address		    VARCHAR(50) GENERATED ALWAYS AS (CONCAT(city, ' ', street, ' ', house_no)) VIRTUAL,
 PRIMARY KEY (CPR)
 );
 
 create table Certificate(
 certificate_no          SMALLINT auto_increment,
 Vaccine_type            ENUM('covaxx','aspera','blast3000','divoc'),
-certified_date          DATE,
 emp_no                  SMALLINT,
+certified_date          DATE,
 PRIMARY KEY (certificate_no),
 FOREIGN KEY (emp_no) REFERENCES Employee (emp_no),
 FOREIGN KEY (vaccine_type) REFERENCES Vaccinetype(vaccine_type)
