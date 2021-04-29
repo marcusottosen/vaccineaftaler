@@ -78,11 +78,31 @@ SELECT * FROM Customer;
 
 
 
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXX Fjerne vaccine fra lageret ved brug til kunde(Vaccination). XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+INSERT Stock VALUES #DETTE BØR SLETTES NÅR DATABASE INSTANS LAVES
+(1, 'covaxx', 200),
+(1, 'divoc', 200),
+(2, 'covaxx', 200);
+
+DELIMITER //
+CREATE TRIGGER Correct_Stock_After_Vaccine
+AFTER INSERT ON Vaccination FOR EACH ROW
+BEGIN
+	UPDATE Stock
+    SET amount=amount-1
+    WHERE
+    (SELECT dept_no FROM Occurs
+	WHERE city = NEW.city)
+    = dept_no
+    AND
+    vaccine_type = NEW.vaccine_type;
+END//
+DELIMITER ;
+
+INSERT Vaccination VALUES
+(NULL, '2021-04-29 12:30', '3101990981', 'covaxx', 'København', '1');
 
 
-
-
-
-
+    
 
 

@@ -104,7 +104,7 @@ FOREIGN KEY (city) REFERENCES Occurs(city)
 );
 
 CREATE TABLE Vaccination (
-vaccination_ID		SMALLINT,
+vaccination_ID		SMALLINT auto_increment,
 vaccinated_dateTime DATETIME,
 CPR					BIGINT(11),
 vaccine_type		ENUM('covaxx','aspera','blast3000','divoc'),
