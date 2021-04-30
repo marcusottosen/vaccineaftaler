@@ -8,9 +8,9 @@ public class IndlaesAftalerEksempel {
 	public static void main(String[] args) {
 		IndlaesVaccinationsAftaler laeser = new IndlaesVaccinationsAftaler();
 		try {
-			List<VaccinationsAftale> aftaler = laeser.indlaesAftaler("vaccinationsaftaler.csv");
+			List<VaccinationsAftale> aftaler = laeser.indlaesAftaler("C:\\Users\\rasmu\\OneDrive\\CDIO\\vaccineaftaler\\vaccinationsaftaler.csv");
 			for(VaccinationsAftale aftale : aftaler) {
-				System.out.println(aftale);
+				System.out.println("Indsætter i DB: " + aftale);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

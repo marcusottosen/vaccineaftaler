@@ -1,5 +1,6 @@
 package dk.dtu.f21_02327;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,8 +51,19 @@ public class VaccinationsAftale {
 	@Override
 	public String toString() {
 		final String D = ";";
-		final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd" +D +"HHmm");  
-  
-		return getCprnr() +D + getNavn() +D +dateFormatter.format(getAftaltTidspunkt()) +D +getLokation() +D +getVaccineType();
+		final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		//Indsætter i DB
+		// Da man ikke kan caste util.Date til sql.Date:
+		java.sql.Date sqlDate = new java.sql.Date(aftaltTidspunkt.getTime());
+		java.sql.Time sqlTime = new java.sql.Time(aftaltTidspunkt.getTime());
+
+		Importdata Importer = new Importdata();
+		try {
+			Importer.Importdata(cprnr, navn, sqlDate, sqlTime, vaccineType, lokation);
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		}
+		return getCprnr() + D + getNavn() + D + dateFormatter.format(getAftaltTidspunkt()) + D + getLokation() + D + getVaccineType();
 	}
 }
