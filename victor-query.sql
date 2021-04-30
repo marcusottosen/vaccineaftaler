@@ -68,10 +68,21 @@ DELIMITER ;
 ##Insert appointments XXXXXXXXX DETTE BØR FJERNES, NÅR VI KAN LÆSE CSV FILEN MED APPOINTMENTS
 INSERT Appointment VALUES 
 	(NULL, '3101990981', 'Victor Kongsbak', '2021-04-05', '11:30', 'covaxx', 'København'),
-	(NULL, '1212562345', 'jakob Svensson', '2021-04-05', '09:30', 'covaxx', 'København'),
+	(NULL, '1212562345', 'Jakob Svensson', '2021-04-05', '09:30', 'covaxx', 'København'),
 	(NULL, '0405993487', 'Torben Jakobsen', '2021-04-05', '11:00', 'covaxx', 'København'),
 	(NULL, '3101990981', 'Victor Kongsbak', '2021-06-05', '12:00', 'covaxx', 'København'),
-	(NULL, '2403778789', 'Anton Bloch', '2021-04-05', '11:00', 'covaxx', 'København');
+	(NULL, '2403778789', 'Anton Bloch', '2021-04-05', '11:00', 'covaxx', 'København'),
+    (NULL, '2312965612', 'Anders Andersen', '2021-07-05', '11:30', 'divoc', 'København'),
+	(NULL, '0411980677', 'Vincent von Dreyer', '2021-06-05', '11:30', 'divoc', 'København'),
+	(NULL, '1204994576', 'Thomas Bohl', '2021-06-05', '10:30', 'aspera', 'København'),
+	(NULL, '0612882354', 'Patrick Meyer', '2021-06-05', '11:30', 'divoc', 'Hillerød'),
+	(NULL, '0412964565', 'Mathias Berger', '2021-04-30', '11:30', 'divoc', 'København'),
+	(NULL, '1206984565', 'Troels Frederiksen', '2021-04-30', '11:30', 'covaxx', 'København'),
+	(NULL, '1206984565', 'Laura Kruse', '2021-04-30', '11:30', 'covaxx', 'København'),
+	(NULL, '1206984565', 'Markus Jakobsen', '2021-04-30', '11:30', 'covaxx', 'København'),
+	(NULL, '2003980454', 'Mathias Orsted', '2021-04-05', '11:30', 'divoc', 'Hillerød'),
+    (NULL, '0412873454', 'Thomas Modvig', '2021-04-30', '11:30', 'divoc', 'Hillerød'),
+    (NULL, '0304084565', 'Vilhelm Alfred', '2021-04-30', '11:30', 'blast3000', 'København');
 SELECT * FROM Appointment;
 SELECT * FROM Customer;
 
@@ -103,6 +114,72 @@ INSERT Vaccination VALUES
 (NULL, '2021-04-29 12:30', '3101990981', 'covaxx', 'København', '1');
 
 
+
+
+#XXXXXXXXXXXXXX FORESPØRGSEL: Tæl mængden af certificerede medarbejdere på alle lokation. ORDER BY dept_no
+INSERT INTO Certificate (certificate_no, vaccine_type, emp_no, certified_date) 
+	VALUES 
+    (NULL, 'divoc', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
+    (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Thomas Marcussen'), now()),
+    (NULL, 'aspera', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
+    (NULL, 'blast3000', (SELECT emp_no FROM Employee WHERE emp_name='Thomas Marcussen'), now());
+SELECT * FROM Certificate;
+
+SELECT * FROM Employee;
+SELECT * FROM Department;
+INSERT emp_dept VALUES
+(1, 1),
+(2, 1),
+(1, 2),
+(2, 2);
+SELECT * FROM emp_dept;
+
+CREATE OR REPLACE VIEW available_certificates AS
+SELECT dept_no, emp_no, vaccine_type, certificate_no
+FROM emp_dept 
+NATURAL JOIN Certificate 
+GROUP BY certificate_no, dept_no
+ORDER BY dept_no;
+
+SELECT * FROM available_certificates;
+
+
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Hvor mange doser af hver vaccine er nødvendig hver dag XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+SELECT * FROM Appointment;
     
+CREATE OR REPLACE VIEW needed_vaccine_doses AS
+SELECT city, vaccine_type, COUNT(vaccine_type) AS 'needed doses'
+FROM Appointment
+WHERE appointment_date=CURDATE()
+GROUP BY vaccine_type, city;
+
+SELECT * FROM needed_vaccine_doses;
+
+	
+    
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Tilføj nyvaccineret person XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
