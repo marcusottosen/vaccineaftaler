@@ -51,7 +51,7 @@ public class VaccinationsAftale {
 	@Override
 	public String toString() {
 		final String D = ";";
-		final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd" +D +"HHmm");
 
 		//Indsætter i DB
 		// Da man ikke kan caste util.Date til sql.Date:
