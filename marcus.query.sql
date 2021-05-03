@@ -1,5 +1,5 @@
 
-#9.1.1
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Beregner alderforskel (9.1.1) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP FUNCTION IF EXISTS ageDifference;
 DELIMITER //
 CREATE FUNCTION ageDifference(dateInput DATE)
@@ -16,19 +16,23 @@ DECLARE age INT;
 END//
 DELIMITER ;
 
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Ved alle ansatte over 30 år, tilføj 50 kr. i løn. 5\% ved alle andre XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 UPDATE Employee SET salary=salary+50 WHERE ageDifference(date_of_birth)>=30;
 UPDATE Employee SET Salary=salary*1.05 WHERE ageDifference(date_of_birth)<30;
 select salary FROM Employee;
 
-#7.4 (gerne uden INSERT)
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Tilføj ekstra vacciner til et lager ved en bestemt department XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 INSERT Stock values 
 ((SELECT dept_no FROM Department WHERE dept_no = 1),'covaxx',5000);
 UPDATE Stock SET amount=amount+1000 WHERE vaccine_type='covaxx' AND dept_no = 1;
 
-#8.7
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find medarbejdere der arbejder mellem 30 og 40 timer om ugen og har et navn der starter med T XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 SELECT emp_no, emp_name, hours FROM Employee WHERE hours/4 BETWEEN 20 AND 30 AND emp_name LIKE 'T%';
 
 
+#XXXXskrammelXXXX
 INSERT INTO Certificate VALUES 
 (NULL, 'covaxx', 1, now()),
 (NULL, 'covaxx', 2, now()),
@@ -36,15 +40,13 @@ INSERT INTO Certificate VALUES
 (NULL, 'blast3000', 3, now()),
 (NULL, 'divoc', 5, now()),
 (NULL, 'divoc', 2, now());
-
 SELECT count(certificate_no) AS NumberOfConaxxCertificates FROM Certificate WHERE Vaccine_type = 'covaxx';
 SELECT count(certificate_no) AS NumberOfAsperaCertificates FROM Certificate WHERE Vaccine_type = 'aspera';
 SELECT count(certificate_no) AS NumberOfBlast3000Certificates FROM Certificate WHERE Vaccine_type = 'blast3000';
 SELECT count(certificate_no) AS NumberOfdivocCertificates FROM Certificate WHERE Vaccine_type = 'divoc';
 
 
-
-
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find for hver type vaccine antallet af medarbejdere der har certificat til denne XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 (SELECT 
     Vaccine_type, COUNT(emp_no) AS NumberOfEmployees FROM Certificate 
     WHERE Vaccine_type = 'covaxx') 
@@ -59,7 +61,8 @@ UNION
 	WHERE Vaccine_type = 'divoc') 
 ORDER BY NumberOfEmployees * - 1;
 
-#1
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Daglige rapport ved PROCEDURE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP PROCEDURE IF EXISTS GetDailyReport;
 DELIMITER //
 CREATE PROCEDURE GetDailyReport(IN dateInput DATE)
@@ -71,11 +74,17 @@ END //
 DELIMITER ;
 CALL GetDailyReport("2021-04-29");
 
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Daglige rapport ved VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+DROP VIEW IF EXISTS DailyReport;
+CREATE VIEW DailyReport (City, Vaccination_date, Vaccine_type, Employee, Customer_CPR, Customer_name, Appointment_date, Appointment_time) AS
+SELECT city, DATE_FORMAT(vaccinated_dateTime, "%d" "/" "%m" "/" "%Y"), vaccine_type, emp_no, CPR, customer_name, appointment_date, appointment_time
+	FROM Vaccination NATURAL RIGHT OUTER JOIN Customer NATURAL RIGHT OUTER JOIN Appointment WHERE date_format(vaccinated_dateTime, "%d %m %Y") = date_format(20210429, "%d %m %Y");
+SELECT * FROM DailyReport;
+
+#XXXXskrammelXXXX
 SELECT DATE_FORMAT("2021-04-29", "%d %m %Y");
 SELECT DATE_FORMAT(vaccinated_dateTime, "%d %m %Y") FROM Vaccination WHERE vaccination_ID=1;
-
 SELECT vaccinated_dateTime FROM Vaccination WHERE vaccination_ID=1;
-
 INSERT INTO Vaccination VALUES
 (3, NOW(), NULL, NULL, NULL, NULL),
 (4, NOW(), NULL, NULL, NULL, NULL);
@@ -83,7 +92,7 @@ SELECT * FROM Vaccination;
 
 
 
-
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Månedlige rapport XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 (SELECT COUNT(vaccination_ID) as Amount, vaccine_Type, COUNT(vaccination_ID)*price as total_Price  
 	FROM Vaccination NATURAL RIGHT OUTER JOIN VaccineType WHERE vaccine_Type = "covaxx" 
 	AND DATE_FORMAT(vaccinated_dateTime, "%M - %Y") LIKE "April - 2021")
@@ -102,6 +111,7 @@ UNION
 ORDER BY Amount * -1;
 
 
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Månedlige rapport ved loop XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP PROCEDURE IF EXISTS GetMonthlyReport;
 DELIMITER //
 CREATE PROCEDURE GetMonthlyReport(IN monthInput varchar(9), IN yearInput int(4))
@@ -136,11 +146,17 @@ CREATE PROCEDURE GetMonthlyReport(IN monthInput varchar(9), IN yearInput int(4))
 DELIMITER ;
 CALL GetMonthlyReport("April", 2021);
             
+
+
+
+
+
+
+
+
            
-
+#XXXXXresten er skrammelXXXXX
 select DATE_FORMAT(vaccinated_dateTime, "%M") from Vaccination;
-
-
 
 SELECT COUNT(vaccination_ID) as Amount, vaccine_Type, COUNT(vaccination_ID)*price as price  
 	FROM Vaccination NATURAL RIGHT OUTER JOIN VaccineType WHERE vaccine_Type = "covaxx" 
@@ -168,11 +184,6 @@ SELECT COUNT(*) FROM Vaccination
 #DATE_FORMAT((SELECT vaccinated_dateTime FROM Vaccination), "%e") = DATE_FORMAT(NOW(), "%e");
 
 
-DROP VIEW IF EXISTS DailyReport;
-CREATE VIEW DailyReport (City, Vaccination_date, Vaccine_type, Employee, Customer_CPR, Customer_name, Appointment_date, Appointment_time) AS
-SELECT city, DATE_FORMAT(vaccinated_dateTime, "%d" "/" "%m" "/" "%Y"), vaccine_type, emp_no, CPR, customer_name, appointment_date, appointment_time
-	FROM Vaccination NATURAL RIGHT OUTER JOIN Customer NATURAL RIGHT OUTER JOIN Appointment WHERE date_format(vaccinated_dateTime, "%d %m %Y") = date_format(20210429, "%d %m %Y");
-SELECT * FROM DailyReport;
 
 
 
