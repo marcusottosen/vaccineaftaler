@@ -1,33 +1,37 @@
 
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE INSTANS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 INSERT Employee VALUES
 (NULL, 2447965342, 'Marcus Thomsen', 'Manager', 100, 210, 'marcus323@gmail.com' , 34256236, 'København', 'tøjmestervej', 16, NULL, '1999-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 2303990756, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26'),
-(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1901-04-26');
+(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1993-04-26'),
+(NULL, 2303990756, 'Mille Fabiano', 'Nurse',90, 160, 'millepigen@gmail.com' , 56768789, 'København', 'Aarhusgade', 12, NULL, '1995-06-26'),
+(NULL, 0305985612, 'Maj Mikkelsen', 'Nurse',90, 160, 'mikkelsen01@gmail.com' , 34540923, 'Odense', 'Odensevej', 128, NULL, '1998-03-12'),
+(NULL, 0312973445, 'Signe Koch', 'Nurse',90, 160, 'signekoch@gmail.com' , 12233445, 'Aarhus', 'Aarhusvej', 2, NULL, '1997-04-26'),
+(NULL, 1204985645, 'Linn Mogensen', 'Doctor',90, 250, 'linnmogensen@gmail.com' , 98563412, 'Holte', 'Vængestien', 2, NULL, '1998-12-26'),
+(NULL, 1212954565, 'Laura Claudius', 'Nurse',90, 160, 'claudius95@gmail.com' , 54782398, 'Virum', 'Virumvej', 15, NULL, '2000-04-03'),
+(NULL, 1207980534, 'Mikkel Rahbek', 'Doctor',90, 250, 'mikkelrahbek@gmail.com' , 16276512, 'Nakskov', 'Overhærupvej', 128, NULL, '1990-08-05');
 SELECT * FROM Employee;
-
 
 INSERT Vaccinetype VALUES 
 	('covaxx'), 
     ('divoc'),
     ('blast3000'),
     ('aspera');
-
+SELECT * FROM Vaccinetype;
 
 INSERT INTO Certificate (certificate_no, vaccine_type, emp_no, certified_date) VALUES 
     (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
     (NULL, 'divoc', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
     (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Thomas Marcussen'), now()),
     (NULL, 'aspera', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
+    (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Thomas Marcussen'), now()),
+    (NULL, 'aspera', (SELECT emp_no FROM Employee WHERE emp_name='Mille Fabiano'), now()),
+    (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Signe Koch'), now()),
+    (NULL, 'blast3000', (SELECT emp_no FROM Employee WHERE emp_name='Linn Mogensen'), now()),
+    (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Laura Claudius'), now()),
+    (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Mikkel Rahbek'), now()),
     (NULL, 'blast3000', (SELECT emp_no FROM Employee WHERE emp_name='Thomas Marcussen'), now());
 SELECT * FROM Certificate;
-
-
-
 
 INSERT Department VALUES
 (NULL, 'Københavnslægehus', 'kbh', 'manøgade', 12, NULL),
@@ -38,7 +42,6 @@ INSERT Department VALUES
 (NULL, 'Nakskovlægerne', 'nakskov', 'Nakskov alle', 6, NULL);
 SELECT * FROM Department;
 
-
 INSERT Occurs VALUES
 ('kbh', (SELECT dept_no FROM Department WHERE city='kbh')),
 ('hill', (SELECT dept_no FROM Department WHERE city='hill')),
@@ -48,9 +51,23 @@ INSERT Occurs VALUES
 ('nakskov', (SELECT dept_no FROM Department WHERE city='nakskov'));
 SELECT * FROM Occurs;
 
+INSERT emp_dept VALUES
+(1, 1),
+(6, 2),
+(1, 3),
+(5, 4),
+(3, 5),
+(1, 6),
+(2, 6),
+(1, 7),
+(2, 7),
+(6, 8);
+SELECT * FROM emp_dept;
 
 
 
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE QUERY XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #XXXXXXXXXXXXXXXXXXXXXXXXXX TRIGGER XXXXXXXXXXXXXXXXXXXXXXXXXXX
 #Registrer appointment og opret customer hvis ikke eksisterer. 
 DELIMITER //
@@ -68,29 +85,6 @@ BEGIN
 	);
 END//
 DELIMITER ;
-
-##Insert appointments XXXXXXXXX DETTE BØR FJERNES, NÅR VI KAN LÆSE CSV FILEN MED APPOINTMENTS
-INSERT Appointment VALUES 
-	(NULL, '3101990981', 'Victor Kongsbak', '2021-04-05', '11:30', 'covaxx', 'kbh'),
-	(NULL, '1212562345', 'Jakob Svensson', '2021-04-05', '09:30', 'covaxx', 'kbh'),
-	(NULL, '0405993487', 'Torben Jakobsen', '2021-04-05', '11:00', 'covaxx', 'kbh'),
-	(NULL, '3101990981', 'Victor Kongsbak', '2021-06-05', '12:00', 'covaxx', 'kbh'),
-	(NULL, '2403778789', 'Anton Bloch', '2021-04-05', '11:00', 'covaxx', 'kbh'),
-    (NULL, '2312965612', 'Anders Andersen', '2021-07-05', '11:30', 'divoc', 'kbh'),
-	(NULL, '0411980677', 'Vincent von Dreyer', '2021-06-05', '11:30', 'divoc', 'kbh'),
-	(NULL, '1204994576', 'Thomas Bohl', '2021-06-05', '10:30', 'aspera', 'kbh'),
-	(NULL, '0612882354', 'Patrick Meyer', '2021-06-05', '11:30', 'divoc', 'hill'),
-	(NULL, '0412964565', 'Mathias Berger', '2021-04-30', '11:30', 'divoc', 'kbh'),
-	(NULL, '1206984565', 'Troels Frederiksen', '2021-04-30', '11:30', 'covaxx', 'kbh'),
-	(NULL, '1206984565', 'Laura Kruse', '2021-04-30', '11:30', 'covaxx', 'kbh'),
-	(NULL, '1206984565', 'Markus Jakobsen', '2021-04-30', '11:30', 'covaxx', 'kbh'),
-	(NULL, '2003980454', 'Mathias Orsted', '2021-04-05', '11:30', 'divoc', 'hill'),
-    (NULL, '0412873454', 'Thomas Modvig', '2021-04-30', '11:30', 'divoc', 'hill'),
-    (NULL, '0304084565', 'Vilhelm Alfred', '2021-04-30', '11:30', 'blast3000', 'kbh');
-SELECT * FROM Appointment;
-SELECT * FROM Customer;
-
-
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXX Fjerne vaccine fra lageret ved brug til kunde(Vaccination). XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -114,20 +108,8 @@ BEGIN
 END//
 DELIMITER ;
 
-INSERT Vaccination VALUES
-(NULL, '2021-04-29 12:30', '3101990981', 'covaxx', 'kbh', '1');
-
-
-
 
 #XXXXXXXXXXXXXX FORESPØRGSEL: Tæl mængden af certificerede medarbejdere på alle lokation. ORDER BY dept_no
-INSERT emp_dept VALUES
-(1, 1),
-(2, 1),
-(1, 2),
-(2, 2);
-SELECT * FROM emp_dept;
-
 CREATE OR REPLACE VIEW available_certificates AS
 SELECT dept_no, emp_no, vaccine_type, certificate_no
 FROM emp_dept 
@@ -149,15 +131,6 @@ WHERE appointment_date=CURDATE()
 GROUP BY vaccine_type, city;
 
 SELECT * FROM needed_vaccine_doses;
-
-	
-    
-
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Tilføj nyvaccineret person XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-INSERT Vaccination VALUES
-(NULL, now(), '3101990981', 'covaxx', 'kbh', '1');
-
-
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX CREATE ROLE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP ROLE Doctor;
@@ -201,18 +174,27 @@ SELECT totalAppointments('2021-04-05', 'kbh');
  SELECT * FROM Appointment;
  
  
- 
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find den totale mængde appointments på en dag på en bestemt lokation XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-
-
-
-
-
-
-
-
-
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SQL PROGRAMMERING: Hvis employee ikke har certifikat XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+DELIMITER //
+CREATE TRIGGER change_employee
+BEFORE INSERT ON Vaccination FOR EACH ROW
+BEGIN
+    IF (SELECT COUNT(*) FROM Certificate WHERE vaccine_type=NEW.vaccine_type AND emp_no=NEW.emp_no)=0
+    THEN SET NEW.emp_no = 
+    (SELECT emp_no
+    FROM Certificate
+    NATURAL JOIN emp_dept
+	NATURAL JOIN Occurs
+    WHERE vaccine_type = NEW.vaccine_type
+    AND city = NEW.city
+    GROUP BY emp_no
+    ORDER BY RAND()
+    LIMIT 1
+    );
+    END IF;
+END//
+DELIMITER ;
 
 
 

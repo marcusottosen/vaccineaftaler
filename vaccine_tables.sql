@@ -57,6 +57,17 @@ FOREIGN KEY (emp_no) REFERENCES Employee (emp_no)
 	ON DELETE CASCADE
 );
 
+CREATE TABLE shift_plan (
+	time_slot_ID		SMALLINT auto_increment,
+    day					DATE,
+    start_time			TIME,
+    end_time			TIME,
+    emp_no				SMALLINT,
+    PRIMARY KEY (time_slot_ID, day, start_time),
+    FOREIGN KEY (emp_no)
+		REFERENCES emp_dept(emp_no)
+);
+
 create table Vaccinetype(
 	vaccine_type 	ENUM('covaxx','aspera','blast3000','divoc'),
 PRIMARY KEY (vaccine_type)
@@ -81,7 +92,7 @@ PRIMARY KEY (CPR)
 
 create table Certificate(
 certificate_no          SMALLINT auto_increment,
-Vaccine_type            ENUM('covaxx','aspera','blast3000','divoc'),
+vaccine_type            ENUM('covaxx','aspera','blast3000','divoc'),
 emp_no                  SMALLINT,
 certified_date          DATE,
 PRIMARY KEY (certificate_no),
@@ -120,6 +131,9 @@ FOREIGN KEY (city)
 FOREIGN KEY (emp_no)
 	REFERENCES Employee(emp_no)
 );
+
+
+
 
 
 
