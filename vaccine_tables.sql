@@ -111,7 +111,8 @@ CREATE TABLE Appointment (
 PRIMARY KEY(daily_appointment_ID),
 FOREIGN KEY (CPR) REFERENCES Customer(CPR),
 FOREIGN KEY (vaccine_type) REFERENCES Vaccinetype(vaccine_type),
-FOREIGN KEY (city) REFERENCES Occurs(city)
+FOREIGN KEY (city) REFERENCES Occurs(city),
+unique index(CPR, appointment_date)
 );
 
 CREATE TABLE Vaccination (
