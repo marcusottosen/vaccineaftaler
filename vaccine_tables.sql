@@ -76,7 +76,7 @@ PRIMARY KEY (vaccine_type)
 CREATE TABLE Stock(
 	dept_no 		SMALLINT,
 	vaccine_type 	ENUM('covaxx','aspera','blast3000','divoc'),
-	Amount 			SMALLINT,
+	Amount 			INT,
 PRIMARY KEY (dept_no, vaccine_type),
 FOREIGN KEY (dept_no) 
 	REFERENCES Department(dept_no),
