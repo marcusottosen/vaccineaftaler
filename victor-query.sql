@@ -11,10 +11,10 @@ INSERT Employee VALUES
 	(NULL, 1207980534, 'Mikkel Rahbek', 'Doctor',90, 250, 'mikkelrahbek@gmail.com' , 16276512, 'Nakskov', 'Overhærupvej', 128, NULL, '1990-08-05');
 
 INSERT Vaccinetype VALUES 
-	('covaxx'), 
-    ('divoc'),
-    ('blast3000'),
-    ('aspera');
+	('covaxx', 700), 
+    ('divoc', 500),
+    ('blast3000', 400),
+    ('aspera', 700);
 
 INSERT INTO Certificate (certificate_no, vaccine_type, emp_no, certified_date) VALUES 
     (NULL, 'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now()),
@@ -197,10 +197,6 @@ BEGIN
     END IF;
 END//
 DELIMITER ;
-
-
-SELECT * FROM Certificate;
-
 
 
 
