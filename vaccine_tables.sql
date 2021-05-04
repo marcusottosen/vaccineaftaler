@@ -63,9 +63,12 @@ CREATE TABLE shift_plan (
     start_time			TIME,
     end_time			TIME,
     emp_no				SMALLINT,
+    dept_no				SMALLINT,
     PRIMARY KEY (time_slot_ID, day, start_time),
     FOREIGN KEY (emp_no)
-		REFERENCES emp_dept(emp_no)
+		REFERENCES emp_dept(emp_no),
+	FOREIGN KEY (dept_no)
+		REFERENCES Department(dept_no)
 );
 
 create table Vaccinetype(
@@ -136,6 +139,7 @@ FOREIGN KEY (emp_no)
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE INSTANS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 INSERT Employee VALUES
 	(NULL, 2447965342, 'Marcus Thomsen', 'Manager', 100, 210, 'marcus323@gmail.com' , 34256236, 'København', 'tøjmestervej', 16, NULL, '1999-04-26'),
 	(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1993-04-26'),
@@ -218,8 +222,6 @@ INSERT emp_dept VALUES
 	(1, 7),
 	(2, 7),
 	(6, 8);
-
-
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE QUERY XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -335,9 +337,6 @@ END//
 DELIMITER ;
 
 
-
-
-
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Beregner alderforskel (9.1.1) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP FUNCTION IF EXISTS ageDifference;
 DELIMITER //
@@ -367,7 +366,6 @@ UPDATE Stock SET amount=amount+1000 WHERE vaccine_type='covaxx' AND dept_no = 1;
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find medarbejdere der arbejder mellem 30 og 40 timer om ugen og har et navn der starter med T XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 SELECT emp_no, emp_name, hours FROM Employee WHERE hours/4 BETWEEN 20 AND 30 AND emp_name LIKE 'T%';
-
 
 #XXXXskrammelXXXX
 INSERT INTO Certificate VALUES 
@@ -472,10 +470,3 @@ CREATE PROCEDURE GetMonthlyReport(IN monthInput varchar(9), IN yearInput int(4))
 	END //
 DELIMITER ;
 CALL GetMonthlyReport("April", 2021);
-
-
-
-
-
-
-
