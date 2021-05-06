@@ -27,13 +27,14 @@ public class VaccinationsAftale {
 		this.vaccineType = vaccineType;
 		this.lokation = lokation;
 
+		//Indlæs til DB
 		java.sql.Date sqlDate = new java.sql.Date(aftaltTidspunkt.getTime());
 		java.sql.Time sqlTime = new java.sql.Time(aftaltTidspunkt.getTime());
 		Importdata Importer = new Importdata();
 		try {
 			Importer.Importdata(cprnr, navn, sqlDate, sqlTime, vaccineType, lokation);
 		} catch (SQLException throwables) {
-			throwables.printStackTrace();
+			System.out.println("CPRnr.: " + cprnr + " har allerede en aftale d. " + sqlDate);
 		}
 
 	}

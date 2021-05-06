@@ -16,7 +16,7 @@ public class Importdata {
         try {
             connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            System.out.println("Kunne ikke oprette forbindelse til databasen");
         }
     }
 
