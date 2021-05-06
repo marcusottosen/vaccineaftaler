@@ -63,12 +63,9 @@ CREATE TABLE shift_plan (
     start_time			TIME,
     end_time			TIME,
     emp_no				SMALLINT,
-    dept_no				SMALLINT,
     PRIMARY KEY (time_slot_ID, day, start_time),
     FOREIGN KEY (emp_no)
-		REFERENCES emp_dept(emp_no),
-	FOREIGN KEY (dept_no)
-		REFERENCES Department(dept_no)
+		REFERENCES emp_dept(emp_no)
 );
 
 create table Vaccinetype(
@@ -139,7 +136,6 @@ FOREIGN KEY (emp_no)
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE INSTANS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
 INSERT Employee VALUES
 	(NULL, 2447965342, 'Marcus Thomsen', 'Manager', 100, 210, 'marcus323@gmail.com' , 34256236, 'København', 'tøjmestervej', 16, NULL, '1999-04-26'),
 	(NULL, 4363456346, 'Thomas Marcussen', 'Nurse',90, 160, 'thomas3523@gmail.com' , 54457565, 'Nørreballe', 'Overhærupvej', 128, NULL, '1993-04-26'),
@@ -223,6 +219,8 @@ INSERT emp_dept VALUES
 	(2, 7),
 	(6, 8);
 
+
+
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DATABASE QUERY XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXX TRIGGER XXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -278,13 +276,13 @@ WHERE appointment_date=CURDATE()
 GROUP BY vaccine_type, city;
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX CREATE ROLE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-DROP ROLE Doctor;
+DROP ROLE IF EXISTS Doctor;
 CREATE ROLE Doctor;
 GRANT SELECT ON Vaccination TO Doctor;
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX CREATE USER AND PRIVILIGES XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-DROP USER 'Anton'@'localhost';
+DROP USER IF EXISTS 'Anton'@'localhost';
 CREATE USER 'Anton'@'localhost' IDENTIFIED BY '0808';
 GRANT SELECT ON Employee TO 'Anton'@'localhost';
 
@@ -357,7 +355,7 @@ DELIMITER ;
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Ved alle ansatte over 30 år, tilføj 50 kr. i løn. 5\% ved alle andre XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 UPDATE Employee SET salary=salary+50 WHERE ageDifference(date_of_birth)>=30;
 UPDATE Employee SET Salary=salary*1.05 WHERE ageDifference(date_of_birth)<30;
-select salary FROM Employee;
+select emp_name, salary FROM Employee;
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Tilføj ekstra vacciner til et lager ved en bestemt department XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -367,18 +365,9 @@ UPDATE Stock SET amount=amount+1000 WHERE vaccine_type='covaxx' AND dept_no = 1;
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find medarbejdere der arbejder mellem 30 og 40 timer om ugen og har et navn der starter med T XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 SELECT emp_no, emp_name, hours FROM Employee WHERE hours/4 BETWEEN 20 AND 30 AND emp_name LIKE 'T%';
 
-#XXXXskrammelXXXX
-INSERT INTO Certificate VALUES 
-(NULL, 'covaxx', 1, now()),
-(NULL, 'covaxx', 2, now()),
-(NULL, 'aspera', 1, now()),
-(NULL, 'blast3000', 3, now()),
-(NULL, 'divoc', 5, now()),
-(NULL, 'divoc', 2, now());
-SELECT count(certificate_no) AS NumberOfConaxxCertificates FROM Certificate WHERE Vaccine_type = 'covaxx';
-SELECT count(certificate_no) AS NumberOfAsperaCertificates FROM Certificate WHERE Vaccine_type = 'aspera';
-SELECT count(certificate_no) AS NumberOfBlast3000Certificates FROM Certificate WHERE Vaccine_type = 'blast3000';
-SELECT count(certificate_no) AS NumberOfdivocCertificates FROM Certificate WHERE Vaccine_type = 'divoc';
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Giv medarbejdere mere i løn, hvis de har arbejdet overtid XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+UPDATE Employee SET hours = hours+((hours-148)*0.5) WHERE hours>148;
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Find for hver type vaccine antallet af medarbejdere der har certificat til denne XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -408,6 +397,7 @@ CREATE PROCEDURE GetDailyReport(IN dateInput DATE)
 END //
 DELIMITER ;
 CALL GetDailyReport("2021-04-29");
+
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Daglige rapport ved VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DROP VIEW IF EXISTS DailyReport;
@@ -470,3 +460,10 @@ CREATE PROCEDURE GetMonthlyReport(IN monthInput varchar(9), IN yearInput int(4))
 	END //
 DELIMITER ;
 CALL GetMonthlyReport("April", 2021);
+
+
+
+
+
+
+
