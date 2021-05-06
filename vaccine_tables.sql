@@ -236,7 +236,7 @@ INSERT Vaccination VALUES(NULL, now(),NULL,NULL,NULL,NULL);
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXX 6.3 - Giv en specifik ansat et certifikat XXXXXXXXXXXXXXXXXXXXXXXXXXX
 INSERT INTO Certificate (certificate_no, vaccine_type,emp_no, certified_date) 
-VALUES (NULL,'covaxx', (SELECT emp_no FROM Employee WHERE emp_name='Marcus Thomsen'), now());
+VALUES (NULL,'covaxx', (SELECT emp_no FROM Employee WHERE emp_no='2'), now());
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXX 6.4 - Ændre telefonnummeret ved en ansat XXXXXXXXXXXXXXXXXXXXXXXXXXX
