@@ -1,16 +1,7 @@
-DROP DATABASE vaccineberedskabet;
+DROP DATABASE IF EXISTS vaccineberedskabet;
 CREATE DATABASE vaccineberedskabet;
 USE vaccineberedskabet;
 
-DROP TABLE IF EXISTS Certificate;
-DROP TABLE IF EXISTS Stock;
-DROP TABLE IF EXISTS emp_dept;
-DROP TABLE IF EXISTS Appointment;
-DROP TABLE IF EXISTS Occurs;
-DROP TABLE IF EXISTS Customer;
-DROP TABLE IF EXISTS Department;
-DROP TABLE IF EXISTS Employee;
-DROP TABLE IF EXISTS Vaccinetype;
 
 CREATE TABLE Employee (
     emp_no          SMALLINT auto_increment,
@@ -230,8 +221,7 @@ INSERT Employee VALUES (NULL, 1207980534, 'jens Erik', 'Doctor',90, 150, 'jenser
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXX 6.2 - Tilføj nyvaccineret person (Vaccination) XXXXXXXXXXXXXXXXXXXXXXXXXXX
-INSERT Vaccination VALUES(NULL, now(),NULL,NULL,NULL,NULL);
-#Der er modsat rapporten her indsat NULL-værdier, da de alle er foreign keys.
+INSERT Vaccination VALUES(NULL, now(),NULL,"covaxx","nakskov",1);
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXX 6.3 - Giv en specifik ansat et certifikat XXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -321,7 +311,11 @@ SELECT emp_no, emp_name, hours FROM Employee WHERE hours/4 BETWEEN 20 AND 30 AND
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 7.8 - Find hvor mange kunder, der dagligt er på enhver lokation XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-SELECT city, COUNT(*) AS Amount FROM Vaccination WHERE DATE_FORMAT((SELECT vaccinated_dateTime FROM Vaccination), "%Y%c%e") = DATE_FORMAT(NOW(), "%Y%c%e");
+SELECT city, count(ROUND((LENGTH(city) - LENGTH(REPLACE (city, city, "") ))/LENGTH(city))) AS Amount 
+FROM vaccination 
+WHERE DATE_FORMAT(vaccinated_dateTime, "%Y%c%e") = DATE_FORMAT(NOW(), "%Y%c%e") 
+GROUP BY city 
+ORDER BY Amount DESC;
 
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 7.9 -  Tjek om et lager har under 20 vacciner, og vis navnet på stedet XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
