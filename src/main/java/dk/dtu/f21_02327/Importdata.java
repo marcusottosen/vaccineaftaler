@@ -2,7 +2,7 @@ package dk.dtu.f21_02327;
 import java.sql.*;
 
 public class Importdata {
-    //Database connection
+    //Connectionindstillinger
     String HOST     = "localhost";
     int PORT        = 3306;
     String DATABASE  = "vaccineberedskabet";
@@ -14,13 +14,15 @@ public class Importdata {
 
     {
         try {
+            //Opret forbindelse
             connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
         } catch (SQLException throwables) {
+            //Ved forbindelsesfejl
             System.out.println("Kunne ikke oprette forbindelse til databasen");
         }
     }
 
-
+    //Indsættelse af appointments i databasen
     public void Importdata(long cprnr, String name, Date date, Time time, String vaccinetype, String location) throws SQLException {
         PreparedStatement datainsert = connection.prepareStatement("INSERT INTO Appointment (daily_appointment_ID, CPR, appointment_name, appointment_date, appointment_time, vaccine_type, city) VALUES (?, ?, ?, ?, ?, ?, ?) ");
         datainsert.setString(1,null);

@@ -27,13 +27,18 @@ public class VaccinationsAftale {
 		this.vaccineType = vaccineType;
 		this.lokation = lokation;
 
-		//Indlæs til DB
+		//Indsættelse i databasen
+		//"Javatid" til "SQLtid", da man ikke kan caste
 		java.sql.Date sqlDate = new java.sql.Date(aftaltTidspunkt.getTime());
 		java.sql.Time sqlTime = new java.sql.Time(aftaltTidspunkt.getTime());
+		//Opretter instans af vores importer-klasse
 		Importdata Importer = new Importdata();
 		try {
+			//Kører vores importer-klasse med aftalens variable
 			Importer.Importdata(cprnr, navn, sqlDate, sqlTime, vaccineType, lokation);
 		} catch (SQLException throwables) {
+			//Databasen er oprettet så samme CPRnr. ikke kan have flere aftaler samme dag.
+			//Skulle man dog forsøge alligevel fås følgende fejl, og der vil ikke blive opretter en appointment.
 			System.out.println("CPRnr.: " + cprnr + " har allerede en aftale d. " + sqlDate);
 		}
 
